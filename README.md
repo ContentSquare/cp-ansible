@@ -91,7 +91,6 @@ ansible group variables:
 `confluent.oss`: whether to use the OSS Version
 `confluent.latest`: whether to upgrade to the latest version, or stick to confuent.version 
 
-
 ## Calling 
 
 check `examples/plaintext/all_single_play.yaml` or `examples/plaintext/all_multiplays.yaml` to see how to implement this role
