@@ -7,6 +7,21 @@
     comment: "Zookeeper User"
     system: yes
     group: "{{zookeeper.group}}"
+
+- name: Ensure zookeeper data directories are created
+  file:
+    path: "{{ dir }}"
+    state: directory
+    owner: "{{ zookeeper.user }}"
+    group: "{{ zookeeper.group }}"
+    mode: 0750
+  become: yes
+  with_items:
+    - "{{ zookeeper.config.dataDir }}"
+    - "{{ zookeeper.config.dataLogDir }}"
+  loop_control:
+    loop_var: dir
+
 - name: zookeeper myid file
   template:
     src: zookeeper/myid.j2
@@ -26,3 +41,5 @@
     name: "{{zookeeper.service_name}}"
     enabled: "{{zookeeper.systemd.enabled}}"
     state: "{{zookeeper.systemd.state}}"
+  notify:
+    - restart zookeeper
