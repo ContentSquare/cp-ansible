@@ -1,0 +1,66 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+compose:
+  debian-zookeeper1:
+    hostname: debian-zookeeper1
+    container_name: debian-zookeeper1
+    image: jrei/systemd-debian:9
+    privileged: True
+    command: "/lib/systemd/systemd"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  debian-broker1:
+    hostname: debian-broker1
+    container_name: debian-broker1
+    image: jrei/systemd-debian:9
+    privileged: True
+    command: "/lib/systemd/systemd"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+platforms:
+  - name: debian-zookeeper1
+    groups:
+      - zookeepers
+  - name: debian-broker1
+    groups:
+      - brokers
+provisioner:
+  name: ansible
+  playbooks:
+      create: ../resources/playbooks/create.yml
+      destroy: ../resources/playbooks/destroy.yml
+      converge: ../resources/playbooks/playbook.yml
+      prepare: ../resources/playbooks/prepare.yml
+  config_options:
+    defaults:
+      hash_behaviour: merge
+  inventory:
+    host_vars:
+      debian-broker1:
+        kafka:
+          broker:
+            id: 1
+  lint:
+    name: ansible-lint
+scenario:
+  name: debian
+verifier:
+  name: testinfra
+  directory: ../resources/tests/
+  lint:
+    name: flake8

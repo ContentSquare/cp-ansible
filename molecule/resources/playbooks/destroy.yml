@@ -1,0 +1,20 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
+  tasks:
+    - name: Destroy molecules instance(s)
+      docker_service:
+        project_name: "cp-ansible-{{ molecule_yml.scenario.name }}"
+        state: absent
+        definition:
+          version: '2'
+          services:
+            "{{ molecule_yml.compose }}"
+
+    - name: Delete docker network(s)
+      docker_network:
+        name: "cp-ansible-default_default"
+        state: absent
