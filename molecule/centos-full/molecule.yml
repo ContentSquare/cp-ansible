@@ -58,9 +58,9 @@ compose:
       driver: "json-file"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  centos-broker3:
-    hostname: centos-broker3
-    container_name: centos-broker3
+  centos-broker2:
+    hostname: centos-broker2
+    container_name: centos-broker2
     image: centos/systemd:latest
     privileged: True
     command: "/sbin/init"

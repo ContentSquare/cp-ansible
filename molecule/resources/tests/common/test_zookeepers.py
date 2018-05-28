@@ -46,4 +46,3 @@ def test_services(host):
     service = host.service(service_name)
     assert service.is_running
     # assert service.is_enabled
-

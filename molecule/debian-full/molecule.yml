@@ -135,7 +135,7 @@ provisioner:
   lint:
     name: ansible-lint
 scenario:
-  name: debian
+  name: debian-full
 verifier:
   name: testinfra
   directory: ../resources/tests/common
