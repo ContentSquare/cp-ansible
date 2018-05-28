@@ -47,8 +47,3 @@ def test_services(host):
     assert service.is_running
     # assert service.is_enabled
 
-
-def test_zookeeper(host):
-    # Send stat and check mode
-    mode = host.run("echo stat | nc localhost 2181 | grep Mode | awk '{ print $2 }'")
-    assert mode.stdout.strip() == 'standalone'

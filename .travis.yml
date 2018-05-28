@@ -6,11 +6,11 @@ services:
 before_install:
   - sudo apt-get -qq update
 env:
-  - SCENARIO="default" ANSIBLE="2.4"
-  - SCENARIO="centos" ANSIBLE="2.4"
-  - SCENARIO="debian" ANSIBLE="2.4"
-  - SCENARIO="default" ANSIBLE="2.5"
-  - SCENARIO="centos" ANSIBLE="2.5"
-  - SCENARIO="debian" ANSIBLE="2.5"
+  - OSDIST="centos" SCENARIO="simple" ANSIBLE="2.4"
+  - OSDIST="centos" SCENARIO="full" ANSIBLE="2.4"
+  - OSDIST="debian" SCENARIO="zookeeper" ANSIBLE="2.4"
+  - OSDIST="centos" SCENARIO="simple" ANSIBLE="2.5"
+  - OSDIST="centos" SCENARIO="full" ANSIBLE="2.5"
+  - OSDIST="debian" SCENARIO="zookeeper" ANSIBLE="2.5"
 install: pip install tox-travis
 script: tox
