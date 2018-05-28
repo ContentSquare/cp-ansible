@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
-#  no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
+  no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
   tasks:
     - name: Log into a Docker registry
       docker_login:
@@ -41,7 +41,7 @@
 
     - name: Update docker image name in compose
       set_fact:
-          compose_yaml: "{{ compose_yaml | combine(new_item, recursive=true) }}"
+        compose_yaml: "{{ compose_yaml | combine(new_item, recursive=true) }}"
       vars:
         new_item: "{ '{{ item.key }}': { 'image': '{{ 'molecule_local/' ~ item.value.image }}' }}"
         compose_yaml: "{{ molecule_yml.compose }}"

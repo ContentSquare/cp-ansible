@@ -42,14 +42,19 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-      create: ../resources/playbooks/create.yml
-      destroy: ../resources/playbooks/destroy.yml
-      converge: ../resources/playbooks/playbook.yml
-      prepare: ../resources/playbooks/prepare.yml
+    create: ../resources/playbooks/create.yml
+    destroy: ../resources/playbooks/destroy.yml
+    converge: ../resources/playbooks/playbook.yml
+    prepare: ../resources/playbooks/prepare.yml
   config_options:
     defaults:
       hash_behaviour: merge
   inventory:
+    group_vars:
+      all:
+        addnl_packages:
+          - net-tools
+          - netcat
     host_vars:
       debian-broker1:
         kafka:

@@ -1,14 +1,4 @@
 ---
-#- name: Setup hosts and install required packages for the test scenario
-#  hosts: all
-#  gather_facts: yes
-#
-
-#- name: Install Confluent PF on all hosts
-#  hosts: all
-#  roles:
-#    - role: cp-ansible
-
 - name: Deploy and configure Zookeepers
   hosts: zookeepers
   vars:

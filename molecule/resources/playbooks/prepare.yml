@@ -8,9 +8,4 @@
         name: "{{ item }}"
         state: present
         update_cache: yes
-        use: apt
-      with_items:
-#        - python2
-        - net-tools
-        - netcat
-#        - sudo
+      with_items: "{{ addnl_packages }}"
