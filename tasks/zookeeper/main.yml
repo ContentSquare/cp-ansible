@@ -43,6 +43,8 @@
     owner: "{{ zookeeper.user }}"
     group: "{{ zookeeper.group }}"
   become: yes
+  notify:
+    - restart zookeeper
 
 - name: Zookeeper add env var to service file
   ini_file:
