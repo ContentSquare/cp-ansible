@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items: "{{ addnl_packages }}"

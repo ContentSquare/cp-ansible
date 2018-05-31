@@ -1,0 +1,145 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+compose:
+  centos-zookeeper1:
+    hostname: centos-zookeeper1
+    container_name: centos-zookeeper1
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  centos-zookeeper2:
+    hostname: centos-zookeeper2
+    container_name: centos-zookeeper2
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  centos-zookeeper3:
+    hostname: centos-zookeeper3
+    container_name: centos-zookeeper3
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  centos-broker1:
+    hostname: centos-broker1
+    container_name: centos-broker1
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  centos-broker2:
+    hostname: centos-broker2
+    container_name: centos-broker2
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  centos-broker3:
+    hostname: centos-broker3
+    container_name: centos-broker3
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+platforms:
+  - name: centos-zookeeper1
+    groups:
+      - zookeepers
+  - name: centos-zookeeper2
+    groups:
+      - zookeepers
+  - name: centos-zookeeper3
+    groups:
+      - zookeepers
+  - name: centos-broker1
+    groups:
+      - brokers
+  - name: centos-broker2
+    groups:
+      - brokers
+  - name: centos-broker3
+    groups:
+      - brokers
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../resources/playbooks/create.yml
+    destroy: ../resources/playbooks/destroy.yml
+    converge: ../resources/playbooks/playbook.yml
+    prepare: ../resources/playbooks/prepare.yml
+  config_options:
+    defaults:
+      hash_behaviour: merge
+  inventory:
+    group_vars:
+      all:
+        addnl_packages:
+          - net-tools
+          - nmap-ncat
+    host_vars:
+      centos-broker1:
+        kafka:
+          broker:
+            id: 1
+      centos-broker2:
+        kafka:
+          broker:
+            id: 2
+      centos-broker3:
+        kafka:
+          broker:
+            id: 3
+  lint:
+    name: ansible-lint
+scenario:
+  name: centos-full
+verifier:
+  name: testinfra
+  directory: ../resources/tests/common
+  additional_files_or_dirs:
+    - ../resources/tests/full/*
+  lint:
+    name: flake8

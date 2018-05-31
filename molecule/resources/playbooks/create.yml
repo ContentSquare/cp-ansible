@@ -1,0 +1,56 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
+  tasks:
+    - name: Log into a Docker registry
+      docker_login:
+        username: "{{ item.registry.credentials.username }}"
+        password: "{{ item.registry.credentials.password }}"
+        email: "{{ item.registry.credentials.email | default(omit) }}"
+        registry: "{{ item.registry.url }}"
+      with_items: "{{ molecule_yml.platforms }}"
+      when:
+        - item.registry is defined
+        - item.registry.credentials is defined
+        - item.registry.credentials.username is defined
+
+    - name: Create Dockerfiles from image names
+      template:
+        src: "{{ molecule_scenario_directory }}/../resources/playbooks/Dockerfile.j2"
+        dest: "{{ molecule_ephemeral_directory }}/Dockerfile_{{ item.key | regex_replace('[^a-zA-Z0-9_]', '_') }}"
+      with_dict: "{{ molecule_yml.compose }}"
+      register: platforms
+
+    - name: Discover local Docker images
+      docker_image_facts:
+        name: "molecule_local/{{ item.item.key }}"
+      with_items: "{{ platforms.results }}"
+      register: docker_images
+
+    - name: Build an Ansible compatible image
+      docker_image:
+        path: "{{ molecule_ephemeral_directory }}"
+        name: "molecule_local/{{ item.item.value.image }}"
+        dockerfile: "{{ item.item.value.dockerfile | default(item.invocation.module_args.dest) }}"
+        force: "{{ item.item.value.force | default(true) }}"
+      with_items: "{{ platforms.results }}"
+      when: platforms.changed or docker_images.results | map(attribute='images') | select('equalto', []) | list | count >= 0
+
+    - name: Update docker image name in compose
+      set_fact:
+        compose_yaml: "{{ compose_yaml | combine(new_item, recursive=true) }}"
+      vars:
+        new_item: "{ '{{ item.key }}': { 'image': '{{ 'molecule_local/' ~ item.value.image }}' }}"
+        compose_yaml: "{{ molecule_yml.compose }}"
+      with_dict: "{{ molecule_yml.compose }}"
+
+    - name: Setting up Docker compose env
+      docker_service:
+        project_name: "cp-ansible-{{ molecule_yml.scenario.name }}"
+        definition:
+          version: '2'
+          services:
+            "{{ compose_yaml }}"

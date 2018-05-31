@@ -4,7 +4,7 @@ zookeeper.connect={% for server in hosts.zookeepers %}{{ hostvars[server].ansibl
 log.dirs={% for logdir in kafka.broker.datadir %}{% if loop.index > 1%},{% endif %}{{ logdir }}{% endfor %}
 
 broker.id={{ kafka.broker.id }}
-{% if kafka.broker.rack %}
+{% if kafka.broker.rack | default(False)%}
 broker.rack={{ kafka.broker.rack }}
 {% endif %}
 
@@ -56,7 +56,7 @@ confluent.metrics.reporter.security.protocol=SSL
 {% endfor %}
 
 {% if not confluent.oss %}
-{% for key, value in kafka.broker.config.enterprise.items() %}
+{% for key, value in kafka.broker.config_enterprise.items() %}
 {{key}}={{value}}
 {% endfor %}
 {% endif %}

@@ -1,0 +1,143 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+compose:
+  default-centos-zookeeper1:
+    hostname: default-centos-zookeeper1
+    container_name: default-centos-zookeeper1
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  default-centos-zookeeper2:
+    hostname: default-centos-zookeeper2
+    container_name: default-centos-zookeeper2
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  default-centos-zookeeper3:
+    hostname: default-centos-zookeeper3
+    container_name: default-centos-zookeeper3
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  default-centos-broker1:
+    hostname: default-centos-broker1
+    container_name: default-centos-broker1
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  default-centos-broker2:
+    hostname: default-centos-broker2
+    container_name: default-centos-broker2
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  default-centos-broker3:
+    hostname: default-centos-broker3
+    container_name: default-centos-broker3
+    image: centos/systemd:latest
+    privileged: True
+    command: "/sbin/init"
+    environment: { container: docker }
+    cap_add:
+      - SYS_ADMIN
+    logging:
+      driver: "json-file"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+platforms:
+  - name: default-centos-zookeeper1
+    groups:
+      - zookeepers
+  - name: default-centos-zookeeper2
+    groups:
+      - zookeepers
+  - name: default-centos-zookeeper3
+    groups:
+      - zookeepers
+  - name: default-centos-broker1
+    groups:
+      - brokers
+  - name: default-centos-broker2
+    groups:
+      - brokers
+  - name: default-centos-broker3
+    groups:
+      - brokers
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../resources/playbooks/create.yml
+    destroy: ../resources/playbooks/destroy.yml
+    converge: ../resources/playbooks/playbook.yml
+    prepare: ../resources/playbooks/prepare.yml
+  config_options:
+    defaults:
+      hash_behaviour: merge
+  inventory:
+    group_vars:
+      all:
+        addnl_packages:
+          - net-tools
+          - nmap-ncat
+    host_vars:
+      default-centos-broker1:
+        kafka:
+          broker:
+            id: 1
+      default-centos-broker2:
+        kafka:
+          broker:
+            id: 2
+      default-centos-broker3:
+        kafka:
+          broker:
+            id: 3
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  directory: ../resources/tests/
+  lint:
+    name: flake8

@@ -1,0 +1,22 @@
+---
+- name: Deploy and configure Zookeepers
+  hosts: zookeepers
+  vars:
+    - confluent_roles:
+        - zookeeper
+    - hosts:
+        zookeepers: "{{ groups['zookeepers'] }}"
+  roles:
+    - role: cp-ansible
+
+- name: Deploy and configure brokers
+  hosts: brokers
+  vars:
+    - confluent_roles:
+        - kafka-broker
+    - hosts:
+        zookeepers: "{{ groups['zookeepers'] }}"
+        kafka:
+          brokers: "{{ groups['brokers'] }}"
+  roles:
+    - role: cp-ansible

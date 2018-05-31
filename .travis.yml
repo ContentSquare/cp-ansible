@@ -1,0 +1,14 @@
+---
+sudo: required
+language: python
+services:
+  - docker
+before_install:
+  - sudo apt-get -qq update
+env:
+  - OSDIST="centos" SCENARIO="simple" ANSIBLE="2.4"
+  - OSDIST="debian" SCENARIO="simple" ANSIBLE="2.4"
+  - OSDIST="centos" SCENARIO="full" ANSIBLE="2.5"
+  - OSDIST="debian" SCENARIO="full" ANSIBLE="2.5"
+install: pip install tox-travis
+script: tox
