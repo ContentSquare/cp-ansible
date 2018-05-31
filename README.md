@@ -1,4 +1,7 @@
+[![Build Status](https://travis-ci.org/ContentSquare/cp-ansible.svg?branch=master)](https://travis-ci.org/ContentSquare/cp-ansible)
+
 Ansible playbooks for installing the [Confluent Platform](http://www.confluent.io).
+
 
 Note:
 These playbooks are provided without support and are intended to be a guideline. Any issues encountered can be reported
