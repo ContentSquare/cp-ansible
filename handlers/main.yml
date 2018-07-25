@@ -16,6 +16,12 @@
     state: restarted
   become: yes
 
+- name: restart mirror-maker service
+  systemd:
+    name: "{{ kafka.mirror.maker.service_name }}"
+    state: restarted
+  become: yes
+
 - name: restart control center
   systemd:
     name: "{{ confluent.control.center.service_name }}"

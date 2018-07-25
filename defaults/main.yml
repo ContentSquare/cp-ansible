@@ -100,6 +100,25 @@ kafka:
     config_enterprise:
       metric.reporters: io.confluent.metrics.reporter.ConfluentMetricsReporter
       confluent.metrics.reporter.bootstrap.servers: "{{ inventory_hostname }}:9092"
+  mirror:
+    maker:
+      service_name: confluent-mirror-maker
+      systemd:
+          enabled: yes
+          state: started
+#      consumer_source:
+#        - group_name:
+#          remote_servers:
+      log_dir: /var/log/mirror-maker
+      user: cp-kafka
+      group: confluent
+      topics:
+        whitelist: "."
+      config:
+        num_streams: 2
+      producer:
+        filename: /etc/kafka/mirror-maker.target.producer.properties
+
 kafkarest:
   user: cp-kafka-rest
   group: confluent

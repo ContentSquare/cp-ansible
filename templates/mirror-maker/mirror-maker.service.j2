@@ -1,0 +1,14 @@
+[Unit]
+Description=Confluent Kafka mirror maker
+After=network.target remote-fs.target
+
+[Service]
+SyslogIdentifier={{ kafka.mirror.maker.service_name }}
+User={{ kafka.mirror.maker.user }}
+Group={{ kafka.mirror.maker.group }}
+Environment="LOG_DIR={{ kafka.mirror.maker.log_dir }}"
+Type=simple
+ExecStart=/usr/bin/kafka-mirror-maker {% for consumer in kafka.mirror.maker.consumers_source | default([]) %}--consumer.config /etc/kafka/mirror-maker.{{ consumer.name }}.consumer.properties {% endfor %} --producer.config {{ kafka.mirror.maker.producer.filename }} --num.streams {{ kafka.mirror.maker.config.num_streams }} --whitelist="{{ kafka.mirror.maker.topics.whitelist }}"
+
+[Install]
+WantedBy=multi-user.target
