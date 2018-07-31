@@ -1,37 +1,37 @@
 ---
 - name: control center create group
   group:
-    name: "{{ confluent.control.center.group }}"
+    name: "{{ confluent_control_center_group }}"
   become: yes
 
 - name: control center create user
   user:
-    name: "{{ confluent.control.center.user }}"
+    name: "{{ confluent_control_center_user }}"
     comment: "Control Center User"
     system: yes
-    group: "{{ confluent.control.center.group }}"
+    group: "{{ confluent_control_center_group }}"
   become: yes
 
 - name: control center create config
   template:
     src: control-center/control-center.properties.j2
-    dest: "{{ confluent.control.center.config_file }}"
+    dest: "{{ confluent_control_center_config_file }}"
     mode: 0640
-    owner: "{{ confluent.control.center.user }}"
-    group: "{{ confluent.control.center.group }}"
+    owner: "{{ confluent_control_center_user }}"
+    group: "{{ confluent_control_center_group }}"
   notify:
     - restart control center
   become: yes
 
 - name: Control Center add env var to service file
   ini_file:
-    path: /usr/lib/systemd/system/confluent-control-center.service
+    path: "{{ confluent_control_center_service_file }}"
     section: Service
     # Mind the quote in option and option ! We want it to be a quoted string in the target file
     option: "Environment='{{ var.key }}"
     value: "{{ var.value }}'"
     no_extra_spaces: yes
-  with_dict: "{{ confluent.control.center.environment | default({}) }}"
+  with_dict: "{{ confluent_control_center_environment | default({}) }}"
   loop_control:
     loop_var: var
   notify: reload systemd
@@ -39,7 +39,7 @@
 
 - name: control center configure service
   systemd:
-    name: "{{ confluent.control.center.service_name }}"
-    enabled: "{{ confluent.control.center.systemd.enabled }}"
-    state: "{{ confluent.control.center.systemd.state }}"
+    name: "{{ confluent_control_center_service_name }}"
+    enabled: "{{ confluent_control_center_systemd_enabled }}"
+    state: "{{ confluent_control_center_systemd_state }}"
   become: yes
