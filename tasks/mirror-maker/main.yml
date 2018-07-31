@@ -1,0 +1,46 @@
+---
+- name: ksql create group
+  group:
+    name: "{{ ksql_group }}"
+  become: yes
+
+- name: ksql Mirror maker user
+  user:
+    name: "{{ ksql_user }}"
+    comment: "Connect Distributed User"
+    system: yes
+    group: "{{ ksql_group }}"
+  become: yes
+
+- name: Kafka Mirror maker producer_properties
+  template:
+    src: mirror-maker/mirror-maker.target.producer.properties.j2
+    dest: "{{ kafka_mirror_maker_producer_filename }}"
+  become: yes
+  notify: "restart mirror-maker service"
+
+- name: Kafka Mirror Maker consumer_properties
+  template:
+    src: mirror-maker/sample.consumer.properties.j2
+    dest: "/etc/kafka/mirror-maker.{{ consumer_source.name }}.consumer.properties"
+  with_items:
+    - "{{ kafka_mirror_maker_consumers_source | default([]) }}"
+  loop_control:
+    loop_var: consumer_source
+  become: yes
+
+- name: "install mirror-maker systemd unit file"
+  template:
+    src: "mirror-maker/mirror-maker.service.j2"
+    dest: "{{ kafka_mirror_maker_service_file }}"
+  become: yes
+  notify:
+    - reload systemd
+    - restart mirror-maker service
+
+- name: mirror-maker configure service
+  systemd:
+    name: "{{ kafka_mirror_maker_service_name }}"
+    enabled: "{{ kafka_mirror_maker_systemd_enabled }}"
+    state: "{{ kafka_mirror_maker_systemd_state }}"
+  become: yes

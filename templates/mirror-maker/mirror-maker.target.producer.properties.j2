@@ -1,0 +1,5 @@
+client.id={{ ansible_hostname }}
+bootstrap.servers={% for server in hosts_kafka_brokers %}{{ hostvars[server].ansible_fqdn }}:{{ broker_config_port }}{{ '' if loop.last else ',' }}{% endfor %}
+
+request.required.acks=1
+producer.type=async

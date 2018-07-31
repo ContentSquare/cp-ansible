@@ -1,0 +1,5 @@
+group.id={{ consumer_source.group_name }}
+client.id={{ ansible_hostname }}
+bootstrap.servers={{ consumer_source.remote_servers | join(',') }}
+rebalance.max.retries=100
+partition.assignment.strategy=org.apache.kafka.clients.consumer.RoundRobinAssignor
