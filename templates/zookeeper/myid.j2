@@ -1,4 +1,4 @@
-{% for host in hosts.zookeepers %}
+{% for host in hosts_zookeepers %}
 {% if host == inventory_hostname %}
 {{ loop.index }}
 {% endif %}
