@@ -1,11 +1,11 @@
 # Maintained by Ansible
-zookeeper.connect={% for server in hosts.zookeepers %}{{ hostvars[server].ansible_fqdn }}:{{ zookeeper.config.clientPort }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka.broker.zookeeper_chroot_path is defined %}/{{ kafka.broker.zookeeper_chroot_path }}{% endif %}
+zookeeper.connect={% for server in hosts_zookeepers %}{{ hostvars[server].ansible_fqdn }}:{{ zookeeper_config_clientPort }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}
 
-log.dirs={% for logdir in kafka.broker.datadir %}{% if loop.index > 1%},{% endif %}{{ logdir }}{% endfor %}
+log.dirs={% for logdir in kafka_broker_datadir %}{% if loop.index > 1%},{% endif %}{{ logdir }}{% endfor %}
 
-broker.id={{ kafka.broker.id }}
-{% if kafka.broker.rack | default(False)%}
-broker.rack={{ kafka.broker.rack }}
+broker.id={{ kafka_broker_id }}
+{% if kafka_broker_rack | default(False)%}
+broker.rack={{ kafka_broker_rack }}
 {% endif %}
 
 {% if security_mode in ['sasl_ssl', 'ssl'] %}
@@ -55,7 +55,7 @@ confluent.metrics.reporter.security.protocol=SSL
 {{ key}}={{value }}
 {% endfor %}
 
-{% if not confluent.oss %}
+{% if not confluent_oss %}
 {% for key, value in kafka.broker.config_enterprise.items() %}
 {{key}}={{value}}
 {% endfor %}
