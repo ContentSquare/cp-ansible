@@ -1,37 +1,37 @@
 ---
 - name: ksql create group
   group:
-    name: "{{ ksql.group }}"
+    name: "{{ ksql_group }}"
   become: yes
 
 - name: ksql create user
   user:
-    name: "{{ ksql.user }}"
+    name: "{{ ksql_user }}"
     comment: "Connect Distributed User"
     system: yes
-    group: "{{ ksql.group }}"
+    group: "{{ ksql_group }}"
   become: yes
 
 - name: ksql create config
   template:
     src: ksql/ksql.properties.j2
-    dest: "{{ ksql.config_file }}"
+    dest: "{{ ksql_config_file }}"
     mode: 0640
-    owner: "{{ ksql.user }}"
-    group: "{{ ksql.group }}"
+    owner: "{{ ksql_user }}"
+    group: "{{ ksql_group }}"
   notify:
     - restart ksql
   become: yes
 
 - name: ksql add env var to service file
   ini_file:
-    path: /usr/lib/systemd/system/confluent-ksql.service
+    path: "{{ ksql_service_file }}"
     section: Service
     # Mind the quote in option and option ! We want it to be a quoted string in the target file
     option: "Environment='{{ var.key }}"
     value: "{{ var.value }}'"
     no_extra_spaces: yes
-  with_dict: "{{ ksql.environment | default({}) }}"
+  with_dict: "{{ ksql_environment | default({}) }}"
   loop_control:
     loop_var: var
   notify: reload systemd
@@ -39,7 +39,7 @@
 
 - name: ksql configure service
   systemd:
-    name: "{{ ksql.service_name }}"
-    enabled: "{{ ksql.systemd.enabled }}"
-    state: "{{ ksql.systemd.state }}"
+    name: "{{ ksql_service_name }}"
+    enabled: "{{ ksql_systemd_enabled }}"
+    state: "{{ ksql_systemd_state }}"
   become: yes
