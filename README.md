@@ -14,7 +14,7 @@ via GitHub issues and will be addressed on a best effort basis.
 
 # Introduction
 
-Ansible provides a simple way to deploy, manage, and configure the Confluent Platform services. This repository provides playbooks and templates to easily 
+Ansible provides a simple way to deploy, manage, and configure the Confluent Platform services. This repository provides playbooks and templates to easily
 spin up a Confluent Platform installation. Specifically this repository:
 
 * Installs Confluent Platform packages
@@ -38,25 +38,16 @@ Both Enterprise and OSS a available
 - hosts: brokers
   gather_facts: no
   vars:
-    - hosts:
-        zookeepers: "{{ groups['zookeepers'] }}"
-        kafka:
-          brokers: "{{ groups['brokers'] }}"
-        schema:
-          registries: "{{ groups['brokers'] }}"
+    - hosts_zookeepers: "{{ groups['zookeepers'] }}"
+    - hosts_kafka_brokers: "{{ groups['brokers'] }}"
+    - hosts_schema_registries: "{{ groups['brokers'] }}"
     - confluent_roles:
       - kafka-broker
-    - confluent:
-        version:
-          major: 4
-          minor: 1
-          patch: 1-1
-        oss: yes
-        latest: no
-    - kafka:
-        broker:
-          zookeeper_chroot_path: "kafka-cluster1"
-        datadir:
+    - confluent_version: 4.1.1-1
+    - confluent_oss: yes
+    - confluent_latest: no
+    - kafka_broker_zookeeper_chroot_path: "kafka-cluster1"
+    - kafka_datadir:
           - /kafka_data
   roles:
     - role: contentsquare.confluent-platform
