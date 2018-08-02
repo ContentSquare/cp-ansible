@@ -20,7 +20,7 @@ def test_kafka_listen(host):
 
 
 def test_my_id(host):
-    brokerid = int(host.ansible.get_variables()['kafka']['broker']['id'])
+    brokerid = int(host.ansible.get_variables()['kafka_broker_id'])
     fconf = host.file('/etc/kafka/server.properties').content_string
     conf_id = int([x.split('=')[1] for x in fconf.split('\n') if x.startswith('broker.id')][0])
     assert brokerid == conf_id

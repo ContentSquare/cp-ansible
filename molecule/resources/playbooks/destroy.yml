@@ -9,6 +9,7 @@
       docker_service:
         project_name: "cp-ansible-{{ molecule_yml.scenario.name }}"
         state: absent
+        remove_volumes: yes
         definition:
           version: '2'
           services:
