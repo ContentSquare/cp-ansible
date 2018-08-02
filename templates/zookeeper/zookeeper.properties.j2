@@ -2,6 +2,6 @@
 {% for key, value in zookeeper.config.items() %}
 {{key}}={{value}}
 {% endfor %}
-{% for host in hosts.zookeepers %}
+{% for host in hosts_zookeepers %}
 server.{{ loop.index }}={{  hostvars[host].ansible_fqdn }}:2888:3888
 {% endfor %}

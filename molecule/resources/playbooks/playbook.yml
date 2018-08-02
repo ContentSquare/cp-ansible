@@ -4,8 +4,7 @@
   vars:
     - confluent_roles:
         - zookeeper
-    - hosts:
-        zookeepers: "{{ groups['zookeepers'] }}"
+    - hosts_zookeepers: "{{ groups['zookeepers'] }}"
   roles:
     - role: cp-ansible
 
@@ -14,9 +13,7 @@
   vars:
     - confluent_roles:
         - kafka-broker
-    - hosts:
-        zookeepers: "{{ groups['zookeepers'] }}"
-        kafka:
-          brokers: "{{ groups['brokers'] }}"
+    - hosts_zookeepers: "{{ groups['zookeepers'] }}"
+    - hosts_kafka_brokers: "{{ groups['brokers'] }}"
   roles:
     - role: cp-ansible

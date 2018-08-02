@@ -1,37 +1,37 @@
 ---
 - name: connect distributed create group
   group:
-    name: "{{ kafka.connect.distributed.group }}"
+    name: "{{ kafka_connect_distributed_group }}"
   become: yes
 
 - name: connect distributed create user
   user:
-    name: "{{ kafka.connect.distributed.user }}"
+    name: "{{ kafka_connect_distributed_user }}"
     comment: "Connect Distributed User"
     system: yes
-    group: "{{ kafka.connect.distributed.group }}"
+    group: "{{ kafka_connect_distributed_group }}"
   become: yes
 
 - name: connect distributed create config
   template:
     src: connect-distributed/connect-distributed.properties.j2
-    dest: "{{ kafka.connect.distributed.config_file }}"
+    dest: "{{ kafka_connect_distributed_config_file }}"
     mode: 0640
-    owner: "{{ kafka.connect.distributed.user }}"
-    group: "{{ kafka.connect.distributed.group }}"
+    owner: "{{ kafka_connect_distributed_user }}"
+    group: "{{ kafka_connect_distributed_group }}"
   notify:
     - restart connect distributed
   become: yes
 
 - name: connect distributed add env var to service file
   ini_file:
-    path: /usr/lib/systemd/system/confluent-kafka-connect.service
+    path: "{{ kafka_connect_distributed_service_file }}"
     section: Service
     # Mind the quote in option and option ! We want it to be a quoted string in the target file
     option: "Environment='{{ var.key }}"
     value: "{{ var.value }}'"
     no_extra_spaces: yes
-  with_dict: "{{ kafka.connect.distributed.environment | default({}) }}"
+  with_dict: "{{ kafka_connect_distributed_environment | default({}) }}"
   loop_control:
     loop_var: var
   notify: reload systemd
@@ -39,7 +39,7 @@
 
 - name: connect distributed configure service
   systemd:
-    name: "{{ kafka.connect.distributed.service_name }}"
-    enabled: "{{ kafka.connect.distributed.systemd.enabled }}"
-    state: "{{ kafka.connect.distributed.systemd.state }}"
+    name: "{{ kafka_connect_distributed_service_name }}"
+    enabled: "{{ kafka_connect_distributed_systemd_enabled }}"
+    state: "{{ kafka_connect_distributed_systemd_state }}"
   become: yes

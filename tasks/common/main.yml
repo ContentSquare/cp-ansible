@@ -19,7 +19,7 @@
 - name: Install the Confluent Platform
   package:
     name: "{{ package_name }}"
-    state: "{% if confluent.latest %}latest{% else %}present{% endif %}"
+    state: "{% if confluent_latest %}latest{% else %}present{% endif %}"
   become: yes
 
 - import_tasks: ssl_certs.yml

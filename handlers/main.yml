@@ -12,42 +12,48 @@
 
 - name: restart connect distributed
   systemd:
-    name: "{{ kafka.connect.distributed.service_name }}"
+    name: "{{ kafka_connect_distributed_service_name }}"
+    state: restarted
+  become: yes
+
+- name: restart mirror-maker service
+  systemd:
+    name: "{{ kafka_mirror_maker_service_name }}"
     state: restarted
   become: yes
 
 - name: restart control center
   systemd:
-    name: "{{ confluent.control.center.service_name }}"
+    name: "{{ confluent_control_center_service_name }}"
     state: restarted
   become: yes
 
 - name: restart kafka
   systemd:
-    name: "{{ kafka.broker.service_name }}"
+    name: "{{ kafka_broker_service_name }}"
     state: restarted
   become: yes
 
 - name: restart kafka-rest
   systemd:
-    name: "{{ kafkarest.service_name }}"
+    name: "{{ kafkarest_service_name }}"
     state: restarted
   become: yes
 
 - name: restart ksql
   systemd:
-    name: "{{ ksql.service_name }}"
+    name: "{{ ksql_service_name }}"
     state: restarted
   become: yes
 
 - name: restart schema-registry
   systemd:
-    name: "{{ schema.registry.service_name }}"
+    name: "{{ schema_registry_service_name }}"
     state: restarted
   become: yes
 
 - name: restart zookeeper
   systemd:
-    name: "{{ zookeeper.service_name }}"
+    name: "{{ zookeeper_service_name }}"
     state: restarted
   become: yes
