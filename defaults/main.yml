@@ -32,6 +32,8 @@ confluent_control_center_environment: []
 kafka_broker_config_enterprise_confluent_metrics_reporter_bootstrap_servers: "{{ inventory_hostname }}:9092"
 kafka_broker_config_enterprise_metric_reporters: io.confluent.metrics.reporter.ConfluentMetricsReporter
 kafka_broker_config_file: /etc/kafka/server.properties
+kafka_broker_config_auto_create_topics_enable: yes
+kafka_broker_config_delete_topics_enable: yes
 kafka_broker_config_group_initial_rebalance_delay_ms: 0
 kafka_broker_config_log_retention_check_interval_ms: 300000
 kafka_broker_config_log_retention_hours: 168
@@ -47,6 +49,7 @@ kafka_broker_config_socket_send_buffer_bytes: 102400
 kafka_broker_config_transaction_state_log_min_isr: 2
 kafka_broker_config_transaction_state_log_replication_factor: 3
 kafka_broker_config_zookeeper_connection_timeout_ms: 6000
+kafka_broker_config_additionals: {}
 kafka_broker_datadir:
   - /var/lib/kafka/data
 kafka_broker_group: confluent
@@ -219,6 +222,8 @@ kafka:
       client.id: "{{ kafka_tools_config_client_id }}"
   broker:
     config:
+      auto.create.topics.enable: "{{ kafka_broker_config_auto_create_topics_enable }}"
+      delete.topic.enable: "{{ kafka_broker_config_delete_topics_enable }}"
       group.initial.rebalance.delay.ms: "{{ kafka_broker_config_group_initial_rebalance_delay_ms }}"
       log.retention.check.interval.ms: "{{ kafka_broker_config_log_retention_check_interval_ms }}"
       log.retention.hours: "{{ kafka_broker_config_log_retention_hours }}"

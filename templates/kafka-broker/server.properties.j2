@@ -55,6 +55,10 @@ confluent.metrics.reporter.security.protocol=SSL
 {{ key}}={{value }}
 {% endfor %}
 
+{% for key, value in kafka_broker_config_additionals.items() %}
+{{ key}}={{value }}
+{% endfor %}
+
 {% if not confluent_oss %}
 {% for key, value in kafka.broker.config_enterprise.items() %}
 {{key}}={{value}}
