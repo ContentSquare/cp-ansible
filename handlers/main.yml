@@ -6,8 +6,7 @@
   become: yes
 
 - name: reload systemd
-  systemd:
-    daemon_reload: yes
+  shell: systemctl daemon-reload
   become: yes
 
 - name: restart connect distributed
