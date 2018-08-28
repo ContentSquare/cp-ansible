@@ -54,7 +54,7 @@ kafka_broker_datadir:
   - /var/lib/kafka/data
 kafka_broker_group: confluent
 kafka_broker_service_name: confluent-kafka
-kafka_broker_service_file: "{{ systemd_services_root_path }}{{ kafka_broker_service_name }}_service"
+kafka_broker_service_file: "{{ systemd_services_root_path }}{{ kafka_broker_service_name }}.service"
 kafka_broker_systemd_enabled: yes
 kafka_broker_systemd_state: started
 kafka_broker_user: cp-kafka
