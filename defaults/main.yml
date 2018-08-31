@@ -60,6 +60,9 @@ kafka_broker_systemd_state: started
 kafka_broker_user: cp-kafka
 kafka_broker_zookeeper_chroot_path: null
 kafka_broker_environment: {}
+kafka_broker_log4j_config_file: /etc/kafka/log4j.properties
+kafka_broker_log4j_max_file_size: 100MB
+kafka_broker_log4j_max_number: 3
 
 kafka_connect_distributed_config_config_storage_replication_factor: 3
 kafka_connect_distributed_config_config_storage_topic: connect-configs
