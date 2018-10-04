@@ -38,6 +38,7 @@ kafka_broker_config_group_initial_rebalance_delay_ms: 0
 kafka_broker_config_log_retention_check_interval_ms: 300000
 kafka_broker_config_log_retention_hours: 168
 kafka_broker_config_log_segment_bytes: 1073741824
+kafka_broker_config_metrics_enabled: false
 kafka_broker_config_num_io_threads: 16
 kafka_broker_config_num_network_threads: 8
 kafka_broker_config_num_partitions: 1
@@ -242,6 +243,7 @@ kafka:
       transaction.state.log.min.isr: "{{ kafka_broker_config_transaction_state_log_min_isr }}"
       transaction.state.log.replication.factor: "{{ kafka_broker_config_transaction_state_log_replication_factor }}"
       zookeeper.connection.timeout.ms: "{{ kafka_broker_config_zookeeper_connection_timeout_ms }}"
+      confluent.support.metrics.enable: "{{ kafka_broker_config_metrics_enabled }}"
     config_enterprise:
       metric.reporters: "{{ kafka_broker_config_enterprise_metric_reporters }}"
       confluent.metrics.reporter.bootstrap.servers: "{{ kafka_broker_config_enterprise_confluent_metrics_reporter_bootstrap_servers }}"
