@@ -48,6 +48,20 @@
   notify: restart kafka
   become: yes
 
+- name: Add Custom directive for the [Service] section (systemd)
+  ini_file:
+    path: "{{ kafka_broker_service_file }}"
+    section: Service
+    # Mind the quote in option and option ! We want it to be a quoted string in the target file
+    option: "{{ var.key }}"
+    value: "{{ var.value }}"
+    no_extra_spaces: yes
+  with_dict: "{{ kafka_broker_custom_service | default({}) }}"
+  loop_control:
+    loop_var: var
+  notify: restart kafka
+  become: yes
+
 - name: log4j configuration
   template:
     src: kafka-broker/log4j.properties.j2
