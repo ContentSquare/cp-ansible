@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Setup some useful aliases to administrate Kafka.
+
+BOOTSTRAP_SERVER="localhost:9092"
+ZOOKEEPERS="{% for server in hosts_zookeepers %}{{ hostvars[server].ansible_fqdn }}:{{ zookeeper_config_clientPort }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}"
+
+# Get the list of all consumer-groups
+function kafka-consumer-group-list() {
+  kafka-consumer-groups\
+    --bootstrap-server ${BOOTSTRAP_SERVER}\
+    --list
+}
+
+# Get lag information for consumer groups (you can specify one with --group <group>)
+function kafka-consumer-group-describe() {
+  kafka-consumer-groups\
+    --bootstrap-server ${BOOTSTRAP_SERVER}\
+    --describe\
+    $@
+}
+
+# Get the list of all topics
+function kafka-topic-list() {
+  kafka-topics\
+    --zookeeper ${ZOOKEEPERS}\
+    --list
+}
+
+# Get description of topics (you can specify one with --topic <topic>)
+function kafka-topic-describe() {
+  kafka-topics\
+    --zookeeper ${ZOOKEEPERS}\
+    --describe\
+    $@
+}
