@@ -72,6 +72,15 @@
   notify: restart kafka
   become: yes
 
+- name: templatize kafka tool scripts
+  template:
+    src: kafka-broker/kafka-admin-env.sh.j2
+    dest: "{{ kafka_broker_kafka_admin_env_sh_file }}"
+    mode: 0644
+    owner: root
+    group: root
+  become: yes
+
 - name: Restart broker if needed
   meta: flush_handlers
 
