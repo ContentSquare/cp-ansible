@@ -34,3 +34,8 @@ function kafka-topic-describe() {
     --describe\
     $@
 }
+
+# List partitions folder sorted by size
+function kafka-partitions() {
+  du -hs /data/disk_00/kafka_data/* | sort -hr
+}
