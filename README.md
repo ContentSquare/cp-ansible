@@ -38,7 +38,10 @@ Both Enterprise and OSS a available
 - hosts: brokers
   gather_facts: no
   vars:
-    - hosts_zookeepers: "{{ groups['zookeepers'] }}"
+    - hosts_zookeepers:
+        = server1:2181
+        = server2:2181
+        = server3:2181
     - hosts_kafka_brokers: "{{ groups['brokers'] }}"
     - hosts_schema_registries: "{{ groups['brokers'] }}"
     - confluent_roles:
