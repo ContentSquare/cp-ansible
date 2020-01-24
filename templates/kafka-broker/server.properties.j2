@@ -1,5 +1,5 @@
 # Maintained by Ansible
-zookeeper.connect={% for server in hosts_zookeepers %}{{ hostvars[server].ansible_fqdn }}:{{ zookeeper_config_clientPort }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}
+zookeeper.connect={% for server in hosts_zookeepers %}{{ server }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}
 
 log.dirs={% for logdir in kafka_broker_datadir %}{% if loop.index > 1%},{% endif %}{{ logdir }}{% endfor %}
 

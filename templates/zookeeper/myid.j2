@@ -1,5 +1,5 @@
 {% for host in hosts_zookeepers %}
-{% if host == inventory_hostname %}
+{% if split(host, ":")[0] == inventory_hostname %}
 {{ loop.index }}
 {% endif %}
 {% endfor %}
