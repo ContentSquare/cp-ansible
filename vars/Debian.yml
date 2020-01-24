@@ -1,5 +1,5 @@
 ---
-openjdk_package: openjdk-8-jdk
+openjdk_package: default-jdk
 repository:
   key: "http://packages.confluent.io/deb/{{ confluent_version.split('.')[0] }}.{{ confluent_version.split('.')[1] }}/archive.key"
   url: "deb http://packages.confluent.io/deb/{{ confluent_version.split('.')[0] }}.{{ confluent_version.split('.')[1] }} stable main"
