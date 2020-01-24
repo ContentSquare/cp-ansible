@@ -1,7 +1,7 @@
 ---
-openjdk_package: default-jdk
+openjdk_package: openjdk-8-jdk
 repository:
   key: "http://packages.confluent.io/deb/{{ confluent_version.split('.')[0] }}.{{ confluent_version.split('.')[1] }}/archive.key"
   url: "deb http://packages.confluent.io/deb/{{ confluent_version.split('.')[0] }}.{{ confluent_version.split('.')[1] }} stable main"
-base_package_name: "{% if confluent_version is version('5.4.0', '>=') %}confluent-community-2.12{% else %}{% if confluent_oss %}confluent-platform-oss-2.11{% else %}confluent-platform-2.11{% endif %}{% endif %}"
+base_package_name: "{% if confluent_oss %}confluent-platform-oss-2.11{% else %}confluent-platform-2.11{% endif %}"
 package_name: "{{ base_package_name }}{% if not confluent_latest %}={{ confluent_version }}{% endif %}"
