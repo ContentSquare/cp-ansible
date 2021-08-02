@@ -2,8 +2,8 @@
 #
 # Setup some useful aliases to administrate Kafka.
 
-BOOTSTRAP_SERVER="localhost:9092"
-ZOOKEEPERS="{% for server in hosts_zookeepers %}{{ server }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}"
+export BOOTSTRAP_SERVER="localhost:9092"
+export ZOOKEEPERS="{% for server in hosts_zookeepers %}{{ server }}{{ '' if loop.last else ',' }}{% endfor %}{% if kafka_broker_zookeeper_chroot_path is defined %}/{{ kafka_broker_zookeeper_chroot_path }}{% endif %}"
 
 # Get the list of all consumer-groups
 function kafka-consumer-group-list() {
