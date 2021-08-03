@@ -10,3 +10,7 @@
     repo: "{{ repository.url }}"
     state: present
   become: yes
+
+- name: apt update
+  apt:
+    update_cache: yes
