@@ -13,11 +13,11 @@
   become: yes
 
 - name: Check current confluent version
-  shell: find /usr/share/java/kafka -name \*kafka_\* | head -1 | grep -o '\kafka[^\n]*' | awk -F '-' '{ print $2}' | awk -F '.' '{print $1"."$2}'
+  shell: dpkg -l | grep ii | grep confluent-kafka-[0-9] | awk '{ print $3 }' | cut -d . -f -2
   become: yes
   register: confluent_current_version
 
-- name: Stop Confluent process
+- name: Stop Confluent process because package upgrade
   service:
     name: confluent-kafka
     state: stopped
