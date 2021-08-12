@@ -12,6 +12,18 @@
     regexp: '^Defaults\s+requiretty.*$'
   become: yes
 
+- name: Check current confluent version
+  shell: find /usr/share/java/kafka -name \*kafka_\* | head -1 | grep -o '\kafka[^\n]*' | awk -F '-' '{ print $2}' | awk -F '.' '{print $1"."$2}'
+  become: yes
+  register: confluent_current_version
+
+- name: Stop Confluent process
+  service:
+    name: confluent-kafka
+    state: stopped
+  become: yes
+  when: confluent_current_version.stdout_lines[0] != confluent_new_version
+
 # Import Distribution Specific tasks
 - name: "Include os {{ ansible_os_family }} specific"
   include_tasks: "{{ ansible_os_family }}.yml"

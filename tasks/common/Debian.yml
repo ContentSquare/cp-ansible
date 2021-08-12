@@ -1,4 +1,23 @@
 ---
+- name: Remove old Confluent package
+  apt:
+    name: "confluent-*"
+    state: "absent"
+  become: yes
+  when: confluent_current_version.stdout_lines[0] != confluent_new_version
+
+- name: Clean unused Confluent package
+  apt:
+    autoremove: yes
+    purge: no
+  become: yes
+  when: confluent_current_version.stdout_lines[0] != confluent_new_version
+
+- name: Remove old repository list
+  shell: find /etc/apt/sources.list.d/ -name packages_confluent_io_deb.list -exec rm {} \;
+  become: yes
+  when: confluent_current_version.stdout_lines[0] != confluent_new_version
+
 - name: Add an Apt signing key
   apt_key:
     url: "{{ repository.key }}"
@@ -7,6 +26,7 @@
 
 - name: Add apt Repository
   apt_repository:
+    filename: "packages_confluent_io_deb"
     repo: "{{ repository.url }}"
     state: present
   become: yes
