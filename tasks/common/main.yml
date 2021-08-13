@@ -12,6 +12,18 @@
     regexp: '^Defaults\s+requiretty.*$'
   become: yes
 
+- name: Check current confluent version
+  shell: dpkg -l | grep ii | grep confluent-kafka-[0-9] | awk '{ print $3 }' | cut -d . -f -2
+  become: yes
+  register: confluent_current_version
+
+- name: Stop Confluent process because package upgrade
+  service:
+    name: confluent-kafka
+    state: stopped
+  become: yes
+  when: confluent_current_version.stdout_lines[0] != confluent_new_version
+
 # Import Distribution Specific tasks
 - name: "Include os {{ ansible_os_family }} specific"
   include_tasks: "{{ ansible_os_family }}.yml"
