@@ -7,6 +7,9 @@
   when:
     - confluent_current_version.stdout_lines
     - confluent_current_version.stdout_lines[0] != confluent_new_version
+    - confluent_new_version != '5.0'
+  tags:
+    - kafka-upgrade
 
 - name: Clean unused Confluent package
   apt:
@@ -16,6 +19,9 @@
   when:
     - confluent_current_version.stdout_lines
     - confluent_current_version.stdout_lines[0] != confluent_new_version
+    - confluent_new_version != '5.0'
+  tags:
+    - kafka-upgrade
 
 - name: Remove old repository list
   shell: find /etc/apt/sources.list.d/ -name packages_confluent_io_deb*.list -exec rm {} \;
@@ -23,6 +29,9 @@
   when:
     - confluent_current_version.stdout_lines
     - confluent_current_version.stdout_lines[0] != confluent_new_version
+    - confluent_new_version != '5.0'
+  tags:
+    - kafka-upgrade
 
 - name: Add an Apt signing key
   apt_key:
