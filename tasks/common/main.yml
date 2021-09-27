@@ -16,6 +16,8 @@
   shell: dpkg -l | egrep "ii|iU" | grep confluent-kafka-[0-9] | awk '{ print $3 }' | cut -d . -f -2
   become: yes
   register: confluent_current_version
+  tags:
+    - kafka-upgrade
 
 - name: Stop Confluent process because package upgrade
   service:
@@ -25,6 +27,9 @@
   when:
     - confluent_current_version.stdout_lines
     - confluent_current_version.stdout_lines[0] != confluent_new_version
+    - confluent_new_version != '5.0'
+  tags:
+    - kafka-upgrade
 
 # Import Distribution Specific tasks
 - name: "Include os {{ ansible_os_family }} specific"
